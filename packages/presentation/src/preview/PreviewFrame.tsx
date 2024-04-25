@@ -116,13 +116,13 @@ export const PreviewFrame = forwardRef<HTMLIFrameElement, PreviewFrameProps>(
 
     const prefersReducedMotion = usePrefersReducedMotion()
 
-    const setDesktopMode = useCallback(
-      () => dispatch({type: ACTION_VIEWPORT, viewport: 'desktop'}),
-      [dispatch],
-    )
-    const setMobileMode = useCallback(
-      () => dispatch({type: ACTION_VIEWPORT, viewport: 'mobile'}),
-      [dispatch],
+    const toggleViewportSize = useCallback(
+      () =>
+        dispatch({
+          type: ACTION_VIEWPORT,
+          viewport: viewport === 'desktop' ? 'mobile' : 'desktop',
+        }),
+      [dispatch, viewport],
     )
     const loading = iframe.status === 'loading' || iframe.status === 'reloading'
     const [timedOut, setTimedOut] = useState(false)
@@ -494,40 +494,26 @@ export const PreviewFrame = forwardRef<HTMLIFrameElement, PreviewFrameProps>(
                 />
               </Flex>
 
-              <Flex align="center" flex="none" gap={1} padding={1}>
+              <Flex align="center" flex="none" gap={1}>
                 <Tooltip
                   animate
-                  content={<Text size={1}>Full viewport</Text>}
+                  content={
+                    <Text size={1}>
+                      Switch to {viewport === 'desktop' ? 'narrow' : 'full'} viewport
+                    </Text>
+                  }
                   fallbackPlacements={['bottom-start']}
                   padding={2}
                   placement="bottom"
                   portal
                 >
                   <Button
-                    aria-label="Full viewport"
+                    aria-label={`Toggle viewport size`}
                     fontSize={1}
-                    icon={DesktopIcon}
+                    icon={viewport === 'desktop' ? MobileDeviceIcon : DesktopIcon}
                     mode="bleed"
-                    onClick={setDesktopMode}
+                    onClick={toggleViewportSize}
                     padding={2}
-                    selected={viewport === 'desktop'}
-                  />
-                </Tooltip>
-                <Tooltip
-                  animate
-                  content={<Text size={1}>Narrow viewport</Text>}
-                  padding={2}
-                  placement="bottom"
-                  portal
-                >
-                  <Button
-                    aria-label="Narrow viewport"
-                    fontSize={1}
-                    icon={MobileDeviceIcon}
-                    mode="bleed"
-                    onClick={setMobileMode}
-                    padding={2}
-                    selected={viewport === 'mobile'}
                   />
                 </Tooltip>
               </Flex>
