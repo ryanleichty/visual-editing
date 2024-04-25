@@ -63,6 +63,7 @@ export interface StructureDocumentPaneParams {
   inspect?: string
   path?: string
   rev?: string
+  prefersLatestPublished?: string
   since?: string
   template?: string
   templateParams?: string
